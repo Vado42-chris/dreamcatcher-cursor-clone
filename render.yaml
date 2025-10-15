@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: dreamcatcher-cursor-clone
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn app:app"
+    healthCheckPath: /health
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: DATABASE_URL
+        generateValue: true
+      - key: SECRET_KEY
+        generateValue: true
+      - key: OLLAMA_CLOUD_ENDPOINT
+        value: https://api.ollama.ai
+      - key: OLLAMA_API_KEY
+        value: your-ollama-api-key-here
