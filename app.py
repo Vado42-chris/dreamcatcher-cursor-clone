@@ -288,7 +288,7 @@ def project_view(project_id):
 
 @app.route('/api/generate-code', methods=['POST'])
 @login_required
-def api_generate_code():
+async def api_generate_code():
     """API endpoint for code generation"""
     try:
         data = request.get_json()
@@ -297,10 +297,7 @@ def api_generate_code():
         context = data.get('context', '')
         
         # Generate code using AI service
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        code = loop.run_until_complete(code_engine.generate_code(prompt, language, context))
-        loop.close()
+        code = await code_engine.generate_code(prompt, language, context)
         
         return jsonify({
             'success': True,
@@ -315,7 +312,7 @@ def api_generate_code():
 
 @app.route('/api/complete-code', methods=['POST'])
 @login_required
-def api_complete_code():
+async def api_complete_code():
     """API endpoint for code completion"""
     try:
         data = request.get_json()
@@ -324,10 +321,7 @@ def api_complete_code():
         model = data.get('model', 'qwen2.5-coder:7b')
         
         # Complete code using AI service
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        completion = loop.run_until_complete(ai_service.complete_code(partial_code, context, model))
-        loop.close()
+        completion = await ai_service.complete_code(partial_code, context, model)
         
         return jsonify({
             'success': True,
@@ -341,7 +335,7 @@ def api_complete_code():
 
 @app.route('/api/refactor-code', methods=['POST'])
 @login_required
-def api_refactor_code():
+async def api_refactor_code():
     """API endpoint for code refactoring"""
     try:
         data = request.get_json()
@@ -350,10 +344,7 @@ def api_refactor_code():
         model = data.get('model', 'qwen2.5-coder:7b')
         
         # Refactor code using AI service
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        refactored = loop.run_until_complete(ai_service.refactor_code(code, refactor_type, model))
-        loop.close()
+        refactored = await ai_service.refactor_code(code, refactor_type, model)
         
         return jsonify({
             'success': True,
@@ -367,7 +358,7 @@ def api_refactor_code():
 
 @app.route('/api/create-project', methods=['POST'])
 @login_required
-def api_create_project():
+async def api_create_project():
     """API endpoint for project creation"""
     try:
         data = request.get_json()
@@ -386,10 +377,7 @@ def api_create_project():
         db.session.commit()
         
         # Generate project structure
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        project_structure = loop.run_until_complete(code_engine.generate_project(project_name, language, framework))
-        loop.close()
+        project_structure = await code_engine.generate_project(project_name, language, framework)
         
         # Create project files
         for file_info in project_structure.get('files', []):
