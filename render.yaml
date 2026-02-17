@@ -15,4 +15,4 @@ services:
       - key: OLLAMA_CLOUD_ENDPOINT
         value: https://api.ollama.ai
       - key: OLLAMA_API_KEY
-        value: your-ollama-api-key-here
+        sync: false
